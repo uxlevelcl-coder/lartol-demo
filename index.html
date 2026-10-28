@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#EE8B00">
 <title>LARTOL — Ingeniería y montaje industrial</title>
 <meta name="description" content="Cálculo estructural, fabricación con soldadura calificada y montaje en faena para minería, celulosa y alimentos. Proyectos de gran tonelaje en Chile.">
 <meta name="robots" content="noindex,nofollow">
@@ -994,5 +995,166 @@ form.sent .ok{display:block}
   document.getElementById('yr').textContent = new Date().getFullYear();
 })();
 </script>
+
+<!-- ============ SELECTOR DE COLOR (demo) ============ -->
+<style>
+.pick-fab{
+  position:fixed;right:20px;bottom:20px;z-index:880;width:52px;height:52px;border-radius:50%;
+  border:1px solid rgba(16,14,11,.18);background:var(--accent);cursor:pointer;
+  box-shadow:0 6px 18px rgba(16,14,11,.22),0 1px 2px rgba(16,14,11,.1);
+  display:flex;align-items:center;justify-content:center;transition:transform .25s var(--ease),box-shadow .25s;
+}
+.pick-fab:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(16,14,11,.28)}
+.pick-fab svg{width:22px;height:22px;stroke:var(--accent-ink);fill:none;stroke-width:1.6}
+.pick-fab::after{
+  content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--accent);
+  opacity:.35;animation:pick-pulse 3s ease-out infinite;
+}
+@keyframes pick-pulse{0%{transform:scale(.9);opacity:.35}70%{transform:scale(1.15);opacity:0}100%{opacity:0}}
+
+.pick-panel{
+  position:fixed;right:20px;bottom:84px;z-index:881;width:300px;display:none;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);
+  box-shadow:var(--shadow-lg);padding:18px;
+}
+.pick-panel.open{display:block}
+.pick-panel h5{
+  font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px;font-weight:500;display:flex;justify-content:space-between;align-items:center;
+}
+.pick-panel h5 span{color:var(--ink);font-weight:500}
+.pick-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:14px}
+.pick-sw{
+  aspect-ratio:1;border-radius:10px;border:1px solid rgba(16,14,11,.14);cursor:pointer;
+  position:relative;transition:transform .2s var(--ease),box-shadow .2s;
+}
+.pick-sw:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(16,14,11,.18)}
+.pick-sw[aria-pressed="true"]::after{
+  content:"";position:absolute;inset:-4px;border:2px solid var(--ink);border-radius:13px;
+}
+.pick-row{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+.pick-row input[type=color]{
+  width:38px;height:34px;padding:0;border:1px solid var(--line-strong);border-radius:9px;background:none;cursor:pointer;
+}
+.pick-row label{font-size:11px;letter-spacing:.06em;color:var(--muted);flex:1}
+.pick-ratio{font-family:var(--mono);font-size:11px;color:var(--ink)}
+.pick-ratio b{color:var(--muted);font-weight:400}
+.pick-reset{
+  margin-top:12px;width:100%;background:none;border:1px solid var(--line-strong);border-radius:var(--r-ctl);
+  padding:9px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  transition:background .2s,color .2s;
+}
+.pick-reset:hover{background:var(--ink);color:var(--surface)}
+.pick-note{font-family:var(--mono);font-size:10.5px;line-height:1.6;color:var(--muted-2);margin:12px 0 0;letter-spacing:.02em}
+@media(max-width:560px){
+  .pick-fab{right:14px;bottom:14px;width:48px;height:48px}
+  .pick-panel{right:14px;left:14px;width:auto;bottom:74px}
+  .pick-panel h5{font-size:11.5px}
+  .pick-reset{font-size:11.5px}
+}
+</style>
+
+<button class="pick-fab" id="pickFab" aria-label="Cambiar color de acento" aria-expanded="false" aria-controls="pickPanel">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2c3.6 4.3 6.1 7.4 6.1 10.2a6.1 6.1 0 0 1-12.2 0c0-2.8 2.5-5.9 6.1-10.2z"/></svg>
+</button>
+
+<div class="pick-panel" id="pickPanel" role="dialog" aria-label="Selector de color de acento">
+  <h5>Color de acento <span id="pickName">Ámbar</span></h5>
+  <div class="pick-grid" id="pickGrid"></div>
+  <div class="pick-row">
+    <input type="color" id="pickInput" value="#EE8B00" aria-label="Color personalizado">
+    <label for="pickInput">Personalizado</label>
+    <span class="pick-ratio" id="pickRatio"><b>—</b></span>
+  </div>
+  <button class="pick-reset" id="pickReset">Restablecer ámbar</button>
+  <p class="pick-note">El color del texto se recalcula solo para mantener contraste AA.</p>
+</div>
+
+<script>
+(function(){
+  const PALETAS = [
+    ['Ámbar',   '#EE8B00'],
+    ['Naranja', '#E2561E'],
+    ['Rojo',    '#C63125'],
+    ['Azul',    '#1A3FA8'],
+    ['Verde',   '#14603F'],
+    ['Grafito', '#2F3430']
+  ];
+  const DEF = PALETAS[0][1];
+  const TINTA = '#171106', CREMA = '#FBF9F4', NEGRO = '#100E0B';
+
+  const hex2rgb = h => {
+    h = h.replace('#','');
+    if (h.length === 3) h = h.split('').map(c=>c+c).join('');
+    return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+  };
+  const lin = v => { v/=255; return v <= 0.04045 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); };
+  const lum = h => { const [r,g,b] = hex2rgb(h); return 0.2126*lin(r) + 0.7152*lin(g) + 0.0722*lin(b); };
+  const ratio = (a,b) => { const l1 = lum(a), l2 = lum(b); const hi = Math.max(l1,l2), lo = Math.min(l1,l2); return (hi+0.05)/(lo+0.05); };
+  const mix = (a,b,t) => {
+    const A = hex2rgb(a), B = hex2rgb(b);
+    return '#' + A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('');
+  };
+
+  const root = document.documentElement;
+  const fab = document.getElementById('pickFab');
+  const panel = document.getElementById('pickPanel');
+  const grid = document.getElementById('pickGrid');
+  const input = document.getElementById('pickInput');
+  const nameEl = document.getElementById('pickName');
+  const ratioEl = document.getElementById('pickRatio');
+
+  function apply(hex, label){
+    hex = hex.toLowerCase();
+    // texto sobre el acento: el que más contraste dé
+    let ink = ratio(TINTA, hex) >= ratio(CREMA, hex) ? TINTA : CREMA;
+    if (ratio(ink, hex) < 4.5) ink = ratio('#000000', hex) >= ratio('#FFFFFF', hex) ? '#000000' : '#FFFFFF';
+    // acento claro para fondos oscuros: aclarar hasta pasar AA
+    let hi = hex, n = 0;
+    while (ratio(hi, NEGRO) < 4.5 && n < 12) { hi = mix(hi, '#FFFFFF', 0.16); n++; }
+
+    root.style.setProperty('--accent', hex);
+    root.style.setProperty('--accent-ink', ink);
+    root.style.setProperty('--accent-hi', hi);
+    input.value = hex;
+    nameEl.textContent = label || 'Personalizado';
+    const r = ratio(ink, hex);
+    ratioEl.innerHTML = '<b>' + r.toFixed(2) + ':1</b>' + (r >= 4.5 ? ' <em style="font-style:normal;color:#14603F">AA</em>' : ' <em style="font-style:normal;color:#B42318">bajo</em>');
+    [...grid.children].forEach(sw => sw.setAttribute('aria-pressed', sw.dataset.hex === hex ? 'true' : 'false'));
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', hex);
+    try { localStorage.setItem('lartol-accent', hex); } catch(e) {}
+  }
+
+  PALETAS.forEach(([nombre, hex]) => {
+    const b = document.createElement('button');
+    b.className = 'pick-sw';
+    b.dataset.hex = hex.toLowerCase();
+    b.style.background = hex;
+    b.title = nombre;
+    b.setAttribute('aria-label', 'Acento ' + nombre);
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', () => apply(hex, nombre));
+    grid.appendChild(b);
+  });
+
+  input.addEventListener('input', e => apply(e.target.value));
+  document.getElementById('pickReset').addEventListener('click', () => apply(DEF, PALETAS[0][0]));
+
+  const open = () => { panel.classList.add('open'); fab.setAttribute('aria-expanded','true'); };
+  const close = () => { panel.classList.remove('open'); fab.setAttribute('aria-expanded','false'); };
+  fab.addEventListener('click', e => { e.stopPropagation(); panel.classList.contains('open') ? close() : open(); });
+  panel.addEventListener('click', e => e.stopPropagation());
+  document.addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+  if (/[?&]picker=0/.test(location.search)) { fab.style.display = 'none'; panel.style.display = 'none'; }
+
+  let saved = null;
+  try { saved = localStorage.getItem('lartol-accent'); } catch(e) {}
+  apply(saved || DEF, (PALETAS.find(p => p[1].toLowerCase() === (saved||DEF).toLowerCase()) || [''])[0]);
+})();
+</script>
+
 </body>
 </html>
