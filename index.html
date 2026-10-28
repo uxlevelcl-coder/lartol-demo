@@ -131,7 +131,7 @@ p{margin:0}
 
 /* medios: un radio, un hover, color real */
 .media{border-radius:var(--r-media);overflow:hidden;position:relative;background:var(--surface-2);display:block}
-.media img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease);filter:saturate(.55) contrast(1.06) sepia(.18) brightness(.99)}
+.media img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease);filter:saturate(.72) contrast(1.05) sepia(.10)}
 .media:hover img{transform:scale(1.03)}
 
 /* ============================================================
@@ -192,7 +192,7 @@ header.scrolled{background:rgba(242,239,232,.88);backdrop-filter:blur(16px) satu
   background:var(--ink);
 }
 .hero-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:52% 42%;
-  filter:saturate(.55) contrast(1.06) brightness(.86) sepia(.18)}
+  filter:saturate(.72) contrast(1.05) brightness(.86) sepia(.10)}
 .hero-card::after{content:"";position:absolute;inset:0;
   background:
     linear-gradient(to top,rgba(16,14,11,.96) 0%,rgba(16,14,11,.80) 32%,rgba(16,14,11,.42) 62%,rgba(16,14,11,.28) 100%),
@@ -299,9 +299,7 @@ section[id]{scroll-margin-top:96px}
    ============================================================ */
 .works{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gap)}
 .work{grid-column:span 4;display:flex;flex-direction:column;gap:var(--s4)}
-.work .media{aspect-ratio:4/5}
-.work:nth-child(3) .media img{object-position:50% 26%}
-.work:nth-child(1) .media img{object-position:50% 38%}
+.work .media{aspect-ratio:1/1}
 .work .meta{display:flex;justify-content:space-between;align-items:center;gap:var(--s3);flex-wrap:wrap}
 .work .tag{font-family:var(--mono);font-size:var(--fs-2xs);letter-spacing:.09em;text-transform:uppercase;
   padding:5px 10px;border-radius:var(--r-pill);background:var(--surface-2);color:var(--ink)}
@@ -579,7 +577,7 @@ form.sent .ok{display:block}
   <section class="hero">
     <div class="wrap">
       <div class="hero-card">
-        <img src="img/hero-wide.jpg" alt="Estructura metálica en montaje, andamios y perfiles de acero" width="1900" height="1068">
+        <img src="img/hero-wide.jpg" alt="Estructura metálica en montaje: gancho de grúa amarillo y chispas de soldadura entre vigas de acero" width="1900" height="1068">
         <div class="hero-inner">
           <p class="eyebrow"><b>Faenas de gran tonelaje</b> · NCh 2369</p>
           <h1>Ingeniería y montaje para faenas que no pueden parar</h1>
@@ -623,7 +621,7 @@ form.sent .ok{display:block}
 
       <div class="bento">
         <article class="card lead" data-reveal>
-          <div class="media"><img src="img/detalle.jpg" alt="Detalle de perfiles y arriostramientos de acero en obra" width="1100" height="1100" loading="lazy"></div>
+          <div class="media"><img src="img/detalle.jpg" alt="Conexión apernada de acero con llave de torque y marcas de control en tiza" width="1100" height="1100" loading="lazy"></div>
           <div class="body">
             <div class="k"><b>01</b><i>Ingeniería</i></div>
             <h3>Ingeniería de detalle y cálculo estructural</h3>
@@ -692,7 +690,7 @@ form.sent .ok{display:block}
       <div class="works">
         <article class="work" data-reveal>
           <a class="media" href="#contacto" aria-label="Ver ficha de la nave de molienda de Minera Sierra Alta">
-            <img src="img/obra-silos.jpg" alt="Silos metálicos de proceso con pasarelas y escalerillas" width="1600" height="1066" loading="lazy">
+            <img src="img/obra-silos.jpg" alt="Interior de la nave de molienda con estructura de acero y luz entrando por las claraboyas" width="1600" height="1066" loading="lazy">
           </a>
           <div class="meta"><span class="tag">Estructuras</span><span class="year">2026 · En ejecución</span></div>
           <h3><a href="#contacto">Nave de molienda y soportes de silo</a></h3>
@@ -706,7 +704,7 @@ form.sent .ok{display:block}
 
         <article class="work" data-reveal style="--d:60ms">
           <a class="media" href="#contacto" aria-label="Ver ficha de la ampliación de planta de Alimentos Rucalhue">
-            <img src="img/obra-andamio.jpg" alt="Andamio y estructura de acero en montaje industrial" width="1600" height="963" loading="lazy">
+            <img src="img/obra-andamio.jpg" alt="Estructura metálica de ampliación con andamio perimetral y grúa de izaje" width="1600" height="963" loading="lazy">
           </a>
           <div class="meta"><span class="tag">Montaje</span><span class="year">2026 · En ejecución</span></div>
           <h3><a href="#contacto">Ampliación de planta de proceso</a></h3>
@@ -720,7 +718,7 @@ form.sent .ok{display:block}
 
         <article class="work" data-reveal style="--d:120ms">
           <a class="media" href="#contacto" aria-label="Ver ficha de pasarelas y piping de Celulosa Itata">
-            <img src="img/obra-planta.jpg" alt="Planta industrial en construcción con grúa torre y silo" width="1600" height="1066" loading="lazy">
+            <img src="img/obra-planta.jpg" alt="Pasarela de tuberías y soportes metálicos con pernos oxidados en primer plano" width="1600" height="1066" loading="lazy">
           </a>
           <div class="meta"><span class="tag">Pasarelas y piping</span><span class="year">2026 · En montaje</span></div>
           <h3><a href="#contacto">Pasarelas de proceso y soportes de tubería</a></h3>
