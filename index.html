@@ -32,6 +32,7 @@
   --muted:#5E5A53;
   --muted-2:#6E6A60;
   --accent:#EE8B00;
+  --accent-deep:#C37200;
   --accent-hi:#FFC24D;
   --accent-ink:#171106;
   --line:rgba(16,14,11,.11);
@@ -115,14 +116,14 @@ p{margin:0}
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:14px 22px;border-radius:var(--r-ctl);border:1px solid transparent;
   font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.08em;text-transform:uppercase;
-  transition:transform .35s var(--ease),background .25s,color .25s,border-color .25s,box-shadow .35s var(--ease);
+  transition:transform .35s var(--ease),background-color .2s ease,color .12s ease,border-color .2s ease,box-shadow .35s var(--ease);
 }
 .btn:hover{transform:var(--lift);box-shadow:var(--shadow)}
 .btn:active{transform:none;box-shadow:none}
 .btn-primary{background:var(--ink);color:var(--surface)}
 .btn-primary:hover{background:var(--ink-2)}
 .btn-accent{background:var(--accent);color:var(--accent-ink);border-color:rgba(23,12,7,.2)}
-.btn-accent:hover{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.btn-accent:hover{background:var(--accent-deep);color:var(--accent-ink);border-color:var(--accent-ink)}
 .btn-outline{border-color:var(--line-strong);color:var(--ink);background:transparent}
 .btn-outline:hover{background:var(--ink);color:var(--surface);border-color:var(--ink)}
 .btn-ghost-inv{border-color:rgba(255,255,255,.34);color:var(--surface);background:rgba(255,255,255,.06);backdrop-filter:blur(6px)}
@@ -1112,6 +1113,7 @@ form.sent .ok{display:block}
     while (ratio(hi, NEGRO) < 4.5 && n < 12) { hi = mix(hi, '#FFFFFF', 0.16); n++; }
 
     root.style.setProperty('--accent', hex);
+    root.style.setProperty('--accent-deep', mix(hex, '#000000', 0.18));
     root.style.setProperty('--accent-ink', ink);
     root.style.setProperty('--accent-hi', hi);
     input.value = hex;
